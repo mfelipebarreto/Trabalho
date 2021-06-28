@@ -1,0 +1,77 @@
+#Biblioteca para Definir Seno
+import math
+import numpy as np
+
+# Definindo as Variáveis
+print("\033[33m") # Amarelo
+h = float(input("Digite o valor de h: "))
+x_0 = float(input("Digite o valor de X_0: "))
+x=[x_0]
+y_0 = float(input("Digite o valor de y_0: "))
+y=[y_0]
+
+iteracoes = int(input("Digite a quantidade de Iterações: "))
+print("\033[0;0m") # Branco
+
+# Definindo as Funções
+def calcularx(x):
+    for i in range(iteracoes):
+        auxX = round((x[i]+h),2)
+        x.append(auxX) 
+
+    return x 
+
+def calcularYLinha(x,y):
+    resultado = (2+(0.1*math.sin(x)))*y*(2000-y)
+    return resultado
+
+def calcularRungeKutta(x,y,h):
+    for i in range(len(x)-1):
+        k1 = calcularYLinha(x[i],y[i])
+        k2 = calcularYLinha(x[i+1],y[i]+(h*k1))
+        resultado = y[i]+((h/2)*(k1+k2))
+        resultado = round(resultado,5)
+        y.append(resultado)
+    return y
+
+def modulo(x): #Para calcular o Erro
+    if(x>0):
+        return x
+    else:
+        return x*(-1)
+
+# Chamada das Funções
+x = calcularx(x)
+y = calcularRungeKutta(x,y,h)
+
+# Imprimindo os dados da Questão
+print("\033[36m") # Ciano
+print("\033[1m") # Negrito
+
+print('Para h = '+str(h)+', encontrar Y('+str(x[len(x)-1])+') no PVI abaixo usando o método de Runge Kutta de 2ª ordem.')
+print("Y' = (2 + 0.1Seno(x)) y (2000 - y)")
+print("Y(0) = 10")
+
+print("\033[0;0m") # Branco
+
+# Imprimindo os Resultdos Obtidos
+print("\033[32m")
+print('Solução pelo Método de Euler Aperfeiçoado.')
+print('x = ', x)
+print('y = ', y)
+print("\033[0;0m")
+
+print("\033[33m") # Amarelo
+
+EDO = float(input("Digite a solução exata da EDO: "))
+Erro = modulo((EDO-y[len(y)-1]))
+
+print("\033[32m") # Verde
+
+print('Erro =', Erro,'')
+
+print("\033[0;0m") # Branco
+
+import matplotlib.pyplot as plt 
+plt.plot(x,y, 'o')
+plt.show()
